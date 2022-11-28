@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">22_Ynov_B</string>
+    <string name="like">J\'aime</string>
+    <string name="dislike">Je n\'aime pas</string>
+    <string name="complements">"Compléments : "</string>
+    <string name="insert_name_here">Saisir nom ici</string>
+    <string name="cancel">Annuler</string>
+    <string name="validate">Valider</string>
+</resources>
