@@ -6,7 +6,6 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import com.amonteiro.a22_ynov_b.databinding.ActivityWeatherBinding
 import com.squareup.picasso.Picasso
-import kotlin.concurrent.thread
 
 class WeatherActivity : AppCompatActivity() {
 
@@ -18,67 +17,48 @@ class WeatherActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        //
-        binding.btLoad.setOnClickListener {
+        /* -------------------------------- */
+        // Observation
+        /* -------------------------------- */
+        //observation de la live data du ViewModel
+        model.weather.observe(this) {
+            //Je me sers de l'elvis operator pour gérer le cas null
+            binding.tv.text = it?.name ?: "-"
+            binding.tvTemp.text = "${it?.temperature?.temp ?: "-"}°"
 
-            //Avant le thread je lance la progressBar
-            binding.progressBar.isVisible = true
-            binding.tvError.isVisible = false
+            binding.tvDesc.text = "-"
+            binding.ivTemp.setImageDrawable(null)
 
-            //Début d'une tache asynchrone (Permission Internet dans l'AndroidManifest)
-            thread {
-                //Lance l'action
-                model.loadData()
-                runOnUiThread {
-                    refreshScreen()
-                    //Je masque la progressBar
-                    binding.progressBar.isVisible = false
+            //If else classique
+            if (it != null) {
+                binding.tvWind.text = "${it.wind.speed}"
+                binding.tvMinMax.text = "(${it.temperature.temp_min}°/${it.temperature.temp_max}°)"
+
+                if (it.weather.isNotEmpty()) {
+                    binding.tvDesc.text = it.weather?.get(0)?.description
+                    Picasso.get().load("https://openweathermap.org/img/wn/${it.weather[0].icon}@4x.png")
+                        .placeholder(R.drawable.ic_baseline_flag_24)
+                        .error(R.drawable.ic_baseline_delete_forever_24)
+                        .into(binding.ivTemp)
                 }
             }
-        }
-
-        refreshScreen()
-    }
-
-    fun refreshScreen() {
-
-        /* -------------------------------- */
-        // Cas qui marche
-        /* -------------------------------- */
-        //Je me sers de l'elvis operator pour gérer le cas null
-        binding.tv.text = model.weather?.name ?: "-"
-        binding.tvTemp.text = "${model.weather?.temperature?.temp ?: "-"}°"
-
-        binding.tvDesc.text = "-"
-        binding.ivTemp.setImageDrawable(null)
-
-        //If else classique
-        if (model.weather != null) {
-            binding.tvWind.text = "${model.weather?.wind?.speed}"
-            binding.tvMinMax.text = "(${model.weather!!.temperature.temp_min}°/${model.weather!!.temperature.temp_max}°)"
-
-            if (!model.weather?.weather.isNullOrEmpty()) {
-                binding.tvDesc.text = model.weather?.weather?.get(0)?.description
-                Picasso.get().load("https://openweathermap.org/img/wn/${model.weather!!.weather[0].icon}@4x.png")
-                    .placeholder(R.drawable.ic_baseline_flag_24)
-                    .error(R.drawable.ic_baseline_delete_forever_24)
-                    .into(binding.ivTemp)
+            else {
+                binding.tvWind.text = "-"
+                binding.tvMinMax.text = "-"
             }
         }
-        else {
-            binding.tvWind.text = "-"
-            binding.tvMinMax.text = "-"
+
+        model.errorMessage.observe(this) {
+            binding.tvError.isVisible = it.isNotBlank()
+            binding.tvError.text = "Une erreur est survenue : $it"
         }
 
         /* -------------------------------- */
-        // Erreur
+        // Abonnement aux clics
         /* -------------------------------- */
-        if (model.errorMessage.isNotBlank()) {
-            binding.tvError.isVisible = true
-            binding.tvError.text = "Une erreur est survenue : ${model.errorMessage}"
-        }
-        else {
-            binding.tvError.isVisible = false
+        binding.btLoad.setOnClickListener {
+            //Lance l'action
+            model.loadData()
         }
 
     }
