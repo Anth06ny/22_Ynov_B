@@ -21,9 +21,11 @@ class WeatherActivity : AppCompatActivity() {
 
             //Avant le thread je lance la progressBar
             binding.progressBar.isVisible = true
+            binding.tvError.isVisible = false
 
             //Début d'une tache asynchrone (Permission Internet dans l'AndroidManifest)
-                thread {
+            thread {
+                try {
                     //Appel API
                     val weather = RequestUtils.loadWeather("Toulouse")
 
@@ -49,6 +51,15 @@ class WeatherActivity : AppCompatActivity() {
                         binding.progressBar.isVisible = false
                     }
                 }
+                catch (e: Exception) {
+                    e.printStackTrace()
+                    runOnUiThread {
+                        binding.tvError.isVisible = true
+                        binding.tvError.text = "Une erreur est survenue : ${e.message}"
+                        binding.progressBar.isVisible = false
+                    }
+                }
+            }
         }
 
 

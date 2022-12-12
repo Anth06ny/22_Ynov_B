@@ -101,10 +101,10 @@
         android:id="@+id/tvError"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Une erreur est survenue"
         android:textColor="@color/design_default_color_error"
         android:textStyle="italic"
         android:visibility="gone"
+        tools:text="Une erreur est survenue"
         tools:visibility="visible" />
 
     <Button
