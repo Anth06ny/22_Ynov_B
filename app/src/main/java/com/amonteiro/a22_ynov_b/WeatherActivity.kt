@@ -57,8 +57,8 @@ class WeatherActivity : AppCompatActivity() {
             binding.tvError.text = "Une erreur est survenue : $it"
         }
 
-        model.runInProgress.observe(this ){
-                binding.progressBar.isVisible = it
+        model.runInProgress.observe(this) {
+            binding.progressBar.isVisible = it
         }
 
         /* -------------------------------- */
@@ -67,14 +67,17 @@ class WeatherActivity : AppCompatActivity() {
         binding.btLoad.setOnClickListener {
 
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
+                == PackageManager.PERMISSION_GRANTED
+            ) {
                 //On a la permission
                 showWeather()
             }
-            else  {
-                 //Demande
-                ActivityCompat.requestPermissions(this,
-                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), 0)
+            else {
+                //Demande
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 0
+                )
             }
         }
     }
@@ -88,19 +91,17 @@ class WeatherActivity : AppCompatActivity() {
             //On a la permission
             showWeather()
         }
-        else  {
+        else {
             //Demande
             model.errorMessage.postValue("Il faut la permission")
         }
     }
 
 
-    fun showWeather(){
+    fun showWeather() {
         //Lance l'action
         model.loadData(this)
     }
-
-
 
 
 }

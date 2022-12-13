@@ -6,15 +6,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.widget.Button
 import android.widget.TimePicker
 import android.widget.Toast
 import com.amonteiro.a22_ynov_b.databinding.ActivityMainBinding
+import com.amonteiro.a22_ynov_b.weatheraround.WeatherAroundActivity
 import java.util.Calendar
 
 const val MENU_TIME_PICKER = 18
 const val MENU_WEATHER = 19
+const val MENU_WEATHER_AROUND = 20
 
 class MainActivity : AppCompatActivity(), TimePickerDialog.OnTimeSetListener {
 
@@ -51,6 +51,7 @@ class MainActivity : AppCompatActivity(), TimePickerDialog.OnTimeSetListener {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menu.add(0,MENU_TIME_PICKER,0,"TimePicker")
         menu.add(0,MENU_WEATHER,0,"Météo")
+        menu.add(0,MENU_WEATHER_AROUND,0,"Météo autour")
 
         return super.onCreateOptionsMenu(menu)
     }
@@ -63,6 +64,10 @@ class MainActivity : AppCompatActivity(), TimePickerDialog.OnTimeSetListener {
         }
         else if(item.itemId == MENU_WEATHER){
             val intent = Intent(this, WeatherActivity::class.java)
+            startActivity(intent)
+        }
+        else if(item.itemId == MENU_WEATHER_AROUND){
+            val intent = Intent(this, WeatherAroundActivity::class.java)
             startActivity(intent)
         }
 
