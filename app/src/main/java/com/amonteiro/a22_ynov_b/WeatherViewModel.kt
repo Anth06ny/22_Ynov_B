@@ -1,5 +1,7 @@
 package com.amonteiro.a22_ynov_b
 
+import android.content.Context
+import android.location.Location
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.amonteiro.a22_ynov_b.exokotlin.RequestUtils
@@ -14,7 +16,8 @@ class WeatherViewModel : ViewModel() {
     //Progressbar
     val runInProgress = MutableLiveData(false)
 
-    fun loadData() {
+    fun loadData(context: Context) {
+
         //reset des données
         //Postvalue garanti l'appel sur l''UIThread de l'observateur
         weather.postValue(null)
@@ -22,10 +25,16 @@ class WeatherViewModel : ViewModel() {
         //j'indique que la tache se lance
         runInProgress.postValue(true)
 
+        val location = LocationUtils.getLastKnownLocation(context)
+
         thread {
             try {
+                if(location == null) {
+                    throw Exception("Aucune localisation trouvé")
+                }
+
                 //Appel API
-                weather.postValue(RequestUtils.loadWeather("Toulouse"))
+                weather.postValue(RequestUtils.loadWeather(location.latitude, location.longitude))
             }
             catch (e: Exception) {
                 e.printStackTrace()

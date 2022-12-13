@@ -1,11 +1,14 @@
 package com.amonteiro.a22_ynov_b.exokotlin
 
+import com.amonteiro.a22_ynov_b.data
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
 
 const val URL_API_WEATHER = "https://api.openweathermap.org/data/2.5/weather?q=##1&appid=b80967f0a6bd10d23e44848547b26550&units=metric&lang=fr"
+
+const val URL_API_WEATHER_LAT_LNG = "https://api.openweathermap.org/data/2.5/weather?appid=b80967f0a6bd10d23e44848547b26550&units=metric&lang=fr"
 const val URL_API_POKEMON = "https://www.amonteiro.fr/api/pokemonN3"
 
 fun main(){
@@ -17,6 +20,15 @@ object RequestUtils {
 
     val client = OkHttpClient()
     val gson = Gson()
+
+    fun loadWeather(lat:Double, long:Double): WeatherBean {
+        //contrôle
+        var json =  sendGet(URL_API_WEATHER_LAT_LNG + "&lat=$lat&lon=$long")
+        val data : WeatherBean = gson.fromJson(json, WeatherBean::class.java)
+
+        //contrôle
+        return data
+    }
 
     fun loadWeather(city:String): WeatherBean {
         //contrôle

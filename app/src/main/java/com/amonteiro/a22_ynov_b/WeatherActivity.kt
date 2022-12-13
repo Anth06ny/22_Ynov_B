@@ -1,7 +1,11 @@
 package com.amonteiro.a22_ynov_b
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import com.amonteiro.a22_ynov_b.databinding.ActivityWeatherBinding
@@ -53,15 +57,52 @@ class WeatherActivity : AppCompatActivity() {
             binding.tvError.text = "Une erreur est survenue : $it"
         }
 
+        model.runInProgress.observe(this ){
+                binding.progressBar.isVisible = it
+        }
+
         /* -------------------------------- */
         // Abonnement aux clics
         /* -------------------------------- */
         binding.btLoad.setOnClickListener {
-            //Lance l'action
-            model.loadData()
-        }
 
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+                //On a la permission
+                showWeather()
+            }
+            else  {
+                 //Demande
+                ActivityCompat.requestPermissions(this,
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), 0)
+            }
+        }
     }
+
+    //Callback demande de permission
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+            == PackageManager.PERMISSION_GRANTED) {
+            //On a la permission
+            showWeather()
+        }
+        else  {
+            //Demande
+            model.errorMessage.postValue("Il faut la permission")
+        }
+    }
+
+
+    fun showWeather(){
+        //Lance l'action
+        model.loadData(this)
+    }
+
+
+
+
 }
 
 
