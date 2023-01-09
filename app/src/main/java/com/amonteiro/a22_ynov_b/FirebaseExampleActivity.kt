@@ -1,5 +1,6 @@
 package com.amonteiro.a22_ynov_b
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -49,6 +50,11 @@ class FirebaseExampleActivity : AppCompatActivity() {
                 .addOnCompleteListener {
                     refreshScreen()
                 }
+        }
+
+        //Je lance l'écran de création de matche
+        binding.fab.setOnClickListener {
+            startActivity(Intent(this, CreateGameActivity::class.java))
         }
     }
 

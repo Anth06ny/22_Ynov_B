@@ -93,6 +93,18 @@ class CarBean2 {
     fun print() = "coucou"
 }
 
+data class MatchBean(
+    //@get:Exclude si on veut un attribut pas en base
+    var id: String? = null,
+    var nameTeam1: String? = null,
+    var nameTeam2: String? = null,
+    var idUserCreator: String? = null,
+    var scoreTeam1: Int = 0,
+    var scoreTeam2: Int = 0,
+    var time: Long = 0
+)
+
+
 /* -------------------------------- */
 // API Weather
 /* -------------------------------- */

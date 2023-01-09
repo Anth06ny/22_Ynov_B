@@ -51,6 +51,7 @@ dependencies {
 
     //Images
     implementation 'com.squareup.picasso:picasso:2.8'
+    implementation 'com.google.firebase:firebase-firestore-ktx:24.4.1'
 
 
     testImplementation 'junit:junit:4.13.2'
