@@ -1,11 +1,12 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'com.google.gms.google-services'
 }
 
 android {
     namespace 'com.amonteiro.a22_ynov_b'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.amonteiro.a22_ynov_b"
@@ -51,7 +52,13 @@ dependencies {
     //Images
     implementation 'com.squareup.picasso:picasso:2.8'
 
+
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    //Ajouter tout seul par Firebase
+    implementation 'com.google.firebase:firebase-auth-ktx:21.1.0'
+    //UI de Firebase
+    implementation 'com.firebaseui:firebase-ui-auth:8.+'
 }

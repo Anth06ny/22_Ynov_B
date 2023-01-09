@@ -1,6 +1,5 @@
 package com.amonteiro.a22_ynov_b.exokotlin
 
-import com.amonteiro.a22_ynov_b.data
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import okhttp3.Request
